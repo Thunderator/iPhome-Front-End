@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <title>iPhome</title>
+
+    <style>
+      #grid-container {
+        display: grid;
+        grid-column-gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        width: 75%;
+        grid-row-gap: 30px;
+      }
+
+      #grid-container > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      body {
+        background-color: #f8f8ff;
+      }
+
+      .marginLogo {
+        margin-left: 1rem;
+        margin-top: 1rem;
+        justify-content: space-between;
+      }
+
+      .marginTitle {
+        margin-bottom: 1rem;
+      }
+
+      .marginAd {
+        margin-right: 1rem;
+      }
+
+      .divDesc {
+        height: 5rem;
+        overflow: auto;
+      }
+
+      a:link {
+        text-decoration: none;
+      }
+
+      a:visited {
+        text-decoration: none;
+      }
+      .card-img-top {
+        width: 286px;
+        height: 191px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Cabeçalho -->
+      <header>
+        <h1 class="marginLogo">
+          iPhome
+          <img
+            src="https://i.pinimg.com/originals/90/6e/2a/906e2ab958db0d27c82f5264be06a10b.png"
+            height="50vh"
+          />
+        </h1>
+
+        <div class="d-flex justify-content-end marginAd">
+          <a>
+            <button
+              type="button"
+              class="btn btn-outline-light text-dark"
+              data-bs-toggle="modal"
+              data-bs-target="#cadastroModal"
+              v-on:click="limpaCampos()"
+            >
+              <img
+                src="https://image.flaticon.com/icons/png/128/25/25304.png"
+                height="50vh"
+              />
+            </button>
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="cadastroModal"
+              tabindex="-1"
+              aria-labelledby="cadastrarModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                      class="modal-title text-center"
+                      id="cadastrarModalLabel"
+                    >
+                      Cadastrar
+                    </h5>
+                    <!----                 <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>-->
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <label for="name-cadastrar" class="col-form-label"
+                        >Nome:</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name-cadastrar"
+                        v-model="cardapio.nome"
+                      />
+
+                      <label for="preco-cadastrar" class="col-form-label"
+                        >Preço:</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="preco-cadastrar"
+                        v-model="cardapio.preco"
+                      />
+
+                      <label for="descricao-cadastrar" class="col-form-label"
+                        >Descrição:</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="descricao-cadastrar"
+                        v-model="cardapio.descricao"
+                      ></textarea>
+
+                      <label for="imagem-cadastrar" class="col-form-label"
+                        >Link Imagem:</label
+                      >
+                      <input
+                        type="text"
+                        placeholder="https://"
+                        class="form-control"
+                        id="imagem-cadastrar"
+                        v-model="cardapio.img"
+                      />
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                      v-on:click="cadastrarCardapio()"
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Fechar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </header>
+
+      <!-- Corpo -->
+      <main>
+        <div class="d-flex justify-content-center marginTitle">
+          <h3>Cardápio</h3>
+        </div>
+
+        <div class="container" id="grid-container">
+          <div v-for="cardapio in lista" id="items-list">
+            <div class="card" style="width: 18rem" id="list">
+              <img
+                v-bind:src="cardapio.img"
+                class="card-img-top"
+                alt="burger"
+                id="cardapioImg"
+              />
+
+              <div class="card-body">
+                <h5 class="card-title" id="cardapioName">
+                  {{ cardapio.nome }}
+                </h5>
+                <br />
+
+                <p class="text-success" id="cardapioPreco">
+                  {{ cardapio.preco }}
+                </p>
+                <br />
+
+                <div class="divDesc">
+                  <p class="card-text" id="cardapioDescricao">
+                    {{ cardapio.descricao }}
+                  </p>
+                </div>
+
+                <nav
+                  class="
+                    navbar navbar-expand-lg navbar-white
+                    bg-white
+                    d-flex
+                    justify-content-around
+                  "
+                  >
+                  <a>
+                    <button
+                      data-bs-toggle="modal"
+                      data-bs-target="#editarModal"
+                      class="btn btn-sm btn-outline-info"
+                      v-on:click="editarCardapio(cardapio.id)"
+                    >
+                      Editar
+                    </button>
+                  </a>
+
+                  <a>
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      v-on:click="deletarItem(cardapio.id)"
+                    >
+                      Deletar
+                    </button>
+                  </a>
+                  
+                </nav>
+              </div>
+            </div>
+          </div>         
+        </div>
+      </main>
+      <div
+        class="modal fade"
+        id="editarModal"
+        tabindex="-1"
+        aria-labelledby="editarModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center" id="editarModalLabel">
+                Edição de cardapio
+              </h5>
+            </div>
+            <div class="modal-body">
+              <form>
+                <label for="name-editar" class="col-form-label">Nome:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name-editar"
+                  v-model="cardapio.nome"
+                />
+
+                <label for="preco-editar" class="col-form-label">Preço:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="preco-editar"
+                  v-model="cardapio.preco"
+                />
+
+                <label for="descricao-editar" class="col-form-label"
+                  >Descrição:</label
+                >
+                <textarea
+                  class="form-control"
+                  id="descricao-editar"
+                  v-model="cardapio.descricao"
+                ></textarea>
+
+                <label for="imagem-editar" class="col-form-label"
+                  >Link Imagem:</label
+                >
+                <input
+                  type="text"
+                  placeholder="https://"
+                  class="form-control"
+                  id="imagem-editar"
+                  v-model="cardapio.img"
+                />
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                id
+                v-on:click="cadastrarCardapio()"
+              >
+                Salvar
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                v-on:click="listarTodos()"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          isDetails: false,
+          lista: [],
+          cardapio: {},
+        },
+        methods: {
+          showDetails: function () {
+            this.isList = false;
+            this.isDetails = true;
+            this.isForm = false;
+          },
+
+          listarTodos: function () {
+            fetch("http://localhost:8080/")
+              .then((resposta) => resposta.json())
+              .then((objetoLista) => {
+                this.lista = objetoLista;
+              });
+          },
+
+          lerDetalhes: function (id) {
+            this.cardapio = this.lista.find((item) => item.id == id);
+          },
+
+          deletarItem: function (id) {
+            fetch("http://localhost:8080/deletar/" + id).then(() => {
+              this.listarTodos();
+              this.cardapio = {};
+            });
+          },
+          cadastrarCardapio: function () {
+            const headers = new Headers({
+              "Content-Type": "application/json",
+            });
+            fetch("http://localhost:8080/adicionar", {
+              method: "POST",
+              headers,
+              body: JSON.stringify(this.cardapio),
+            })
+              .then((resposta) => resposta.json())
+              .then((objetoCardapio) => {
+                this.cardapio = objetoCardapio;
+                this.listarTodos();
+                this.lerDetalhes(this.cardapio.id);
+                this.limpaCampos();
+              });
+          },
+
+          limpaCampos: function () {
+            this.cardapio = {};
+          },
+
+          editarCardapio: function (id) {
+            this.lerDetalhes(id);
+            this.showDetails();
+
+            console.log(id);
+          },
+        },
+        created: function () {
+          this.listarTodos();
+        },
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
