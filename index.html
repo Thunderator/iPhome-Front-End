@@ -333,16 +333,10 @@
       var app = new Vue({
         el: "#app",
         data: {
-          isDetails: false,
           lista: [],
           cardapio: {},
         },
         methods: {
-          showDetails: function () {
-            this.isList = false;
-            this.isDetails = true;
-            this.isForm = false;
-          },
 
           listarTodos: function () {
             fetch("http://localhost:8080/")
@@ -386,7 +380,6 @@
 
           editarCardapio: function (id) {
             this.lerDetalhes(id);
-            this.showDetails();
 
             console.log(id);
           },
